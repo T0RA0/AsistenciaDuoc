@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Activar Asistencia - Profesor</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1e3c72;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: #2a5298;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    input {
+      padding: 0.7em;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    button {
+      padding: 0.7em 2em;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    #estado {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Ingreso del Profesor</h2>
+    <input type="password" id="clave" placeholder="Ingrese clave secreta" required>
+    <button onclick="enviarClave()">Activar asistencia</button>
+    <p id="estado"></p>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz0sEHETx87SFBNsPelISI7vr9SFMheusMtoHf4Yy-8oXLl6Doo7jd-RMrh5xFX6dpx/exec"; // ← Reemplaza con tu URL real
+
+    async function enviarClave() {
+      const clave = document.getElementById("clave").value.trim();
+      const estado = document.getElementById("estado");
+
+      if (!clave) {
+        estado.innerText = "❌ Debes ingresar la clave";
+        return;
+      }
+
+      estado.innerText = "⏳ Enviando correos...";
+
+      try {
+        const formData = new FormData();
+        formData.append("clave", clave);
+
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          body: formData
+        });
+
+        const txt = await res.text();
+        estado.innerText = txt;
+      } catch (err) {
+        estado.innerText = "❌ Error al contactar con el servidor";
+      }
+    }
+  </script>
+</body>
+</html>
